@@ -18,12 +18,18 @@ import { shuffle } from './helpers';
 
 
 const config = {
-  apiKey: "AIzaSyCqf-B49wkmM2dxSkJoOR1uwF0lfypU-vw",
-  authDomain: "kithub-aa9f5.firebaseapp.com",
-  databaseURL: "https://kithub-aa9f5.firebaseio.com",
-  projectId: "kithub-aa9f5",
-  storageBucket: "",
-  messagingSenderId: "321165294365"
+  // apiKey: "AIzaSyCqf-B49wkmM2dxSkJoOR1uwF0lfypU-vw",
+  // authDomain: "kithub-aa9f5.firebaseapp.com",
+  // databaseURL: "https://kithub-aa9f5.firebaseio.com",
+  // projectId: "kithub-aa9f5",
+  // storageBucket: "",
+  // messagingSenderId: "321165294365"
+    apiKey: "AIzaSyDk2RD3uR9uJxIa4ZN5J1S4g2mVmpqdre0",
+    authDomain: "kithub-v2.firebaseapp.com",
+    databaseURL: "https://kithub-v2.firebaseio.com",
+    projectId: "kithub-v2",
+    storageBucket: "kithub-v2.appspot.com",
+    messagingSenderId: "658171645254"
 };
 
 firebase.initializeApp(config);
@@ -137,8 +143,6 @@ class App extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setCategory = this.setCategory.bind(this);
     this.loginWithGoogle = this.loginWithGoogle.bind(this);
-    // this.addToWishlist = this.addToWishlist.bind(this);
-    // this.addToKit = this.addToKit.bind(this);
     this.removeProduct = this.removeProduct.bind(this);
     this.addToList = this.addToList.bind(this);
     this.sortProductsAlpha = this.sortProductsAlpha.bind(this);
