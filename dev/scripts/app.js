@@ -18,18 +18,18 @@ import { shuffle } from './helpers';
 
 
 const config = {
-  // apiKey: "AIzaSyCqf-B49wkmM2dxSkJoOR1uwF0lfypU-vw",
-  // authDomain: "kithub-aa9f5.firebaseapp.com",
-  // databaseURL: "https://kithub-aa9f5.firebaseio.com",
-  // projectId: "kithub-aa9f5",
-  // storageBucket: "",
-  // messagingSenderId: "321165294365"
-    apiKey: "AIzaSyDk2RD3uR9uJxIa4ZN5J1S4g2mVmpqdre0",
-    authDomain: "kithub-v2.firebaseapp.com",
-    databaseURL: "https://kithub-v2.firebaseio.com",
-    projectId: "kithub-v2",
-    storageBucket: "kithub-v2.appspot.com",
-    messagingSenderId: "658171645254"
+  apiKey: "AIzaSyCqf-B49wkmM2dxSkJoOR1uwF0lfypU-vw",
+  authDomain: "kithub-aa9f5.firebaseapp.com",
+  databaseURL: "https://kithub-aa9f5.firebaseio.com",
+  projectId: "kithub-aa9f5",
+  storageBucket: "",
+  messagingSenderId: "321165294365"
+    // apiKey: "AIzaSyDk2RD3uR9uJxIa4ZN5J1S4g2mVmpqdre0",
+    // authDomain: "kithub-v2.firebaseapp.com",
+    // databaseURL: "https://kithub-v2.firebaseio.com",
+    // projectId: "kithub-v2",
+    // storageBucket: "kithub-v2.appspot.com",
+    // messagingSenderId: "658171645254"
 };
 
 firebase.initializeApp(config);
