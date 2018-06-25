@@ -1,17 +1,20 @@
 .button {
-    background-color: white;
-    border: 1px solid $med-purple;
-    color: $med-purple;
+    background-color: lighten($light-blue, 5);
+    border: none;
+    box-shadow: 5px 5px 0 darken($light-blue, 50);
+    color: black;
     display: block;
     font-size: 1.4rem;
     font-weight: $bold;
     margin: 10px 0;
     padding: 10px;
     transition: all 0.5s ease-in-out;
+    text-transform: uppercase;
     width: 100%;
 
     &:hover {
-        background-color: $med-purple;
+        background-color: darken($light-blue, 50);
+        box-shadow: 5px 5px 0 darken($light-blue, 20);
         color: white;
     }
 
@@ -22,6 +25,7 @@
 
     &--reverse {
         background-color: $med-purple;
+        box-shadow: 5px 5px 0 $dark-purple;
         color: white;
 
         &:hover {
@@ -29,50 +33,17 @@
             color: $med-purple;
         }
     }
-}
 
-.link--button {
-    background: transparent;
-    border: none;
-    color: $link-color;
-    font-weight: $bold;
-    padding: 0 7px;
-    transition: all 0.5s ease-in-out;
+    &--submit {
+        font-size: 1.6rem;
+        padding: 1.5rem;
+        text-transform: uppercase;
+    }
 
-    &:hover {
-        color: $link-color-hover;
-        cursor: pointer;
-        text-decoration: underline;
+    &:last-of-type {
+        margin-bottom: 0;
     }
 }
 
-/* ------------  FORM STYLING  ------------ */
 
-select{
-    background-color: white;
-    border: 1px solid $med-purple;
-    color: $dark-purple;
-    display: block;
-    font-size: 1.4rem;
-    font-weight: $bold;
-    margin: 10px 0;
-    padding: 5px;
-    transition: all 0.5s ease-in-out;
-		width: 100%;
-		text-align: center;
-		option{
-			color: $dark-purple;
-		}
-}
-
-form{
-	padding: 20px;
-	margin: 20px auto;
-	width: 50%;
-	min-width:300px;
-		@media (max-width:500px){
-			width:100%;
-			min-width: 150px;
-		}
-}
 

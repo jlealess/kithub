@@ -1,0 +1,37 @@
+.categories-row {
+	background-color: #F1EAFC;
+    margin: 80px 0 -100px;
+    padding: 40px 0 70px;
+
+    &__heading {
+        margin: 0;
+        text-align: center;
+        // text-transform: uppercase;
+    }
+}
+
+.categories {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 30px;
+}
+
+.category {
+    &__heading {
+        padding-top: 1rem;
+        text-transform: uppercase;
+    }
+
+    &__list {
+        &__item {
+            font-size: 1.8rem;
+            padding-bottom: .75rem;
+
+            a {
+                color: $link-color;
+                font-weight: bold;
+                text-decoration: none;
+            }
+        }
+    }
+}

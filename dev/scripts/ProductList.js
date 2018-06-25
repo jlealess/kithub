@@ -3,26 +3,20 @@ import Product from './Product';
 
 const ProductList = (props) => {
     return (
-
-        <div>
-            {props.loggedIn !== true ? 
-            <div>
-                <h3>Please log in to save products to your lists</h3>
-            </div>
-            : null} 
-            {
-                props.products.length > 0 ? 
-                    <ul className="product-list clearfix">
+        <div className="wrapper">
+            {props.products.length > 0 ? 
+                    <ul className="product__list">
                         {props.products.map((product, i) => {
                             return (
-                                <li className="product_li" key={product.id}>
+                                <li className="product__item" key={product.id}>
                                     <Product
                                         brand={product.brand}
                                         description={product.description}
                                         id={product.id}
                                         image_link={product.image_link}
-																				name={product.name}
-																				product_link={product.product_link}
+										name={product.name}
+                                        product_link={product.product_link}
+                                        product_type={product.product_type}
                                         currentUserId={props.currentUserId}
                                         button1Text={props.button1Text}
                                         button1Handler={props.button1Handler}
@@ -31,13 +25,13 @@ const ProductList = (props) => {
                                         button2Text={props.button2Text}
                                         button2Context={props.button2Context}
                                         loggedIn={props.loggedIn}
-                                        // context={props.context}
+                                        loginWithGoogle={props.loginWithGoogle}
                                     />
                                 </li>
                             )
                         })}
                     </ul>
-                : <p className="products-no-results">No products to display yet</p>
+                : <p className="products__no-results">No products to display yet</p>
             }
 
                 

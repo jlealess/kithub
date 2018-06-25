@@ -1,56 +1,91 @@
 /* =========================================
 HEADER
 ============================================ */
-
 header {
+    .logo {
+        width: 150px;
 
-    h1 {
-        color: $med-purple;
-        font-size: 3em;
-        font-weight: 400;
-        margin: 0;
-        padding: 0;
-        text-transform: uppercase;
-
-        span {
-            font-weight: 700;
+        img {
+            height: auto;
+            width: 100%;
         }
     }
 }
 
-nav{
-    padding-top: 20px;
-	ul{
-		float:right;
-		@media (max-width:480px){
-			float:none;
-			text-align: center;
-		}
+.header-container {
+    svg {
+		height: 3vw;
+		left: 0;
+		position: absolute;
+		top: 100%;
+		width: 100%;
+	}
+}
 
-	li{
-        padding: 5px;
-        font-size: 2rem;
-				float:left;
-					@media (max-width:480px){
-					float:none;
-					text-align: center;
-					}
-        a {
-            color: $link-color;
-            font-weight: bold;
-            padding: 0 7px;
+.header__top-row {
+    align-items: center;
+    background-color: black;
+    display: flex;
+    justify-content: space-between;
+    opacity: 1;
+    padding: 0 15px;
+    position: relative;
+    z-index: 100;
+
+    @media screen and (max-width: 600px) {
+        flex-wrap: wrap;
+        justify-content: center;
+        padding-bottom: 1.5rem;
+    }
+}
+
+.main-nav {
+    @media screen and (max-width: 600px) {
+        width: 100%;
+    }
+
+    .active {
+        border-bottom: 2px solid $med-purple;
+
+        &:hover {
+            border-bottom: 2px solid $med-purple;
+        }
+    }
+
+    &__list {
+        display: flex;
+        flex: row wrap;
+
+        @media screen and (max-width: 600px) {
+            justify-content: center;
+        }
+
+        &__link {
+            border-bottom: 2px solid transparent;
+            color: white;
+            font-size: .9em;
+            font-weight: 700;
+            margin: 0 1rem;
             text-decoration: none;
-            transition: all 0.5s ease-in-out;
+            text-transform: uppercase;
+            transition: $transition;
+
+            @media screen and (min-width: 500px) {
+                font-size: 1em;
+                margin: 0 1.5rem;
+            }
+
+            &--button {
+                background: transparent;
+                border: none;
+                border-bottom: 2px solid transparent;
+                margin-right: 0;
+                padding: 0;
+            }
 
             &:hover {
-                color: $link-color-hover;
-                text-decoration: underline;
-            }
-
-            &.active {
-                color: $dark-purple;
+                border-bottom: 2px solid white;
             }
         }
-		}
-	}
+    }
 }

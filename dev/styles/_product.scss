@@ -1,64 +1,77 @@
-.product_li{
-	float: left;
-	max-width: 300px;
-}
-
 .product {
-	background: white;
-	width: 250px;
-	margin: 20px 10px;
-	// min-width: 200px;
-	border: 2px solid $light-blue;
-	box-shadow: 4px 4px 0px $light-blue;
-	padding: 10px;
-	height: 450px;
-	position: relative; // so we can position-absolute the buttons
+    align-content: space-between;
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-rows: min-content 1fr min-content;
+    height: 100%;
 
-	span{
-		display: block;
-	}
-	a{
-		text-decoration: none;
-		color: $med-purple;
-	}
-	a:visited{
-		color: $med-purple;
-	}
+    &__brand,
+    &__name {
+        display: block;
+    }
+
+    &__brand {
+        text-transform: uppercase;
+    }
+
+    &__buttons {
+        align-self: end;
+        margin-top: auto;
+    }
+
+    &__headline {
+        line-height: 1.4;
+        margin-top: 0;
+        text-align: center;
+    }
+
+    &__image {
+        height: 100%;
+        margin: 0 auto;
+        object-fit: cover;
+
+        &__container {
+            height: 250px;
+            margin: 2.5rem 0;
+            width: 100%;
+        }
+    }
+
+    &__item {
+        background-color: white;
+        border: 2px solid $dark-purple;
+        box-shadow: 10px 10px 0 #A789DA;
+        padding: 2rem;
+        transition: $transition;
+
+        &:hover {
+            box-shadow: 10px 10px 0 $dark-purple;
+        }
+    }
+
+    &__list {
+        display: grid;
+        grid-gap: 30px;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+
+        @media screen and (min-width: 500px) {
+            padding-top: 3rem;
+        }
+    }
+
+    &__name {
+        margin-top: .7rem;
+
+        a {
+            color: $link-color;
+            text-decoration: none;
+        }
+    }
 }
 
-.product__name{
-	color: inherit;
-}
-
-.product__brand{
-	text-transform: uppercase;
-}
-
-.product__headline {
-	margin-top: 10px;
-	line-height: 1.5;
-}
-
-.product__image--container{
-	color: inherit;
-	position: relative;
-	img{
-		margin: 0 auto;
-	}
-}
-
-.color-set__item{
-	border-radius: 50%;
-	width:10px;
-	height:10px;
-	display:inline-block;
-	margin: 2px;
-}
-
-.buttons {
-	position: absolute;
-	bottom: 10px;
-	width: 85%;
-	left: 50%;
-	transform: translateX(-50%);
+.products {
+    &__user-prompt {
+        font-weight: 700;
+        padding: 1.5rem 0 0;
+    }
 }

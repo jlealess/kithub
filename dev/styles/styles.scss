@@ -12,6 +12,8 @@ Designed and built by Jackie Lealess, Orry Mevorach, and Laura-Louise Tobin
 @import 'sign-in';
 @import 'product';
 @import 'button';
+@import 'forms';
+@import 'categories';
 @import 'footer';
 
 
@@ -19,47 +21,119 @@ Designed and built by Jackie Lealess, Orry Mevorach, and Laura-Louise Tobin
 MAIN STYLES
 ============================================ */
 
-html{
+html {
 	font-size:62.5%;
 }
 
-img{
+img {
 	display: block;
 	max-width: 100%;
 }
 
-.wrapper{
-	border: 10px solid $dark-purple;
-	padding: 60px 60px 30px;
-	width: 85%;
-	margin: 75px auto;
-	background-color: rgba(255, 255, 255, 0.9);
-		@media (max-width:500px){
-			padding:25px;
-			padding-bottom:15px;
-		}
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 
-ul{
-	list-style:none;
-	-webkit-padding-start: 0px;
-	-moz-padding-start: 0px;
+.app {
+	background-image: url(../../images/pattern-5.svg);
+	background-repeat: repeat;
+	background-size: 50%;
+	display: grid;
+	grid-auto-flow: row;
+	grid-template-rows: auto 1fr auto;
+	min-height: 100vh;
 }
 
-body{
-	background-image: url(../../images/background-body.jpg);
-	background-attachment:fixed;
-	background-repeat: no-repeat;
-	background-size:cover;
-}
+.heading {
+	padding-top: 60px;
+	position: relative;
 
-.product-list{
-
-	display: inline-block;
-	li{
-		@media (max-width: 700px){
-			width: 100%;
-		}
+	&__inner {
+		align-items: center;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		margin-top: 7rem;
 	}
 
+	&:before {
+		background-color: #F1EAFC;
+		content: '';
+		display: block;
+		height: 50px;
+		position: absolute;
+		top: 0;
+		width: 100%;
+	}
+	
+	svg {
+		height: 3vw;
+		left: 0;
+		position: absolute;
+		top: 50px;
+		width: 100%;
+	}
 }
+
+.heading--home {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+}
+
+.home {
+	background-color: #F1EAFC;
+	margin-bottom: 30px;
+	padding-bottom: 5vw;
+	position: relative;
+	
+	@media screen and (min-width: 500px) {
+		padding-top: 30px;
+	}
+
+	svg {
+		height: 3vw;
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: 100%;
+	}
+
+	&__inner {
+		display: grid;
+		grid-column-gap: 30px;
+		padding-bottom: 10px;
+
+		@media screen and (max-width: 699px) {
+			padding-bottom: 3rem;
+			padding-top: 2rem;
+		}
+		
+		@media screen and (min-width: 700px) {
+			padding-top: 3rem;
+		}
+
+		@media screen and (min-width: 768px) {
+			grid-column-gap: 50px;
+			grid-template-columns: 1fr 1fr;
+		}
+
+		@media screen and (min-width: 1000px) {
+			grid-column-gap: 100px;
+		}
+	}
+}
+
+.wrapper {
+	align-items: start;
+	display: grid;
+	grid-template-columns: 1fr minmax(300px, 1200px) 1fr;
+	padding: 0 15px;
+
+	& > * {
+		grid-column: 2 / 3;
+	}
+}
+

@@ -1,0 +1,48 @@
+.form {
+    width: 100%;
+
+    &--inline {
+            @media screen and (max-width: 499px) {
+                margin-bottom: 2rem;
+                width: 100%;
+            }
+            @media screen and (min-width: 500px) {
+                width: auto;
+            }
+    }
+
+
+    select {
+        background-color: white;
+        border: 1px solid black;
+        border-radius: 0;
+        box-shadow: 5px 5px 0 $dark-purple;
+        box-sizing: border-box;
+        margin-bottom: 5px;
+        outline: none;
+        padding: 1rem;
+        width: 100%;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+
+        // src: https://codepen.io/vkjgr/pen/VYMeXp
+        background-image:
+            linear-gradient(45deg, transparent 50%, $dark-purple 50%),
+            linear-gradient(135deg, $dark-purple 50%, transparent 50%),
+            linear-gradient(to right, #ccc, #ccc);
+        background-position:
+            calc(100% - 20px) calc(1em + 2px),
+            calc(100% - 15px) calc(1em + 2px),
+            calc(100% - 2.5em) 0.5em;
+        background-size:
+            5px 5px,
+            5px 5px,
+            1px 1.5em;
+        background-repeat: no-repeat;       
+
+        & + select {
+            margin-top: 1rem;
+        }
+    }
+}
