@@ -1,6 +1,6 @@
 import React from 'react';
 import HomePageHeading from "./HomePageHeading";
-import Home from './Home';
+import FindProducts from './FindProducts';
 import ProductList from './ProductList';
 import { sortArray } from './helpers';
 
@@ -10,7 +10,8 @@ class HomePage extends React.Component {
         const products = props.products;
 
         this.state = {
-            products
+            products,
+            selectedFilter: ''
         }
 
         this.handleFilterChange = this.handleFilterChange.bind(this);
@@ -42,7 +43,7 @@ class HomePage extends React.Component {
     render() {
         return (
             <div className="home__outer">
-                <Home
+                <FindProducts
                     handleSubmit={this.props.handleSubmit}
                     selectedProductType={this.props.selectedProductType}
                     handleChange={this.props.handleChange}

@@ -9,7 +9,8 @@ class Kit extends React.Component {
         const products = props.products;
 
         this.state = {
-            products
+            products,
+            selectedFilter: ''
         }
 
         this.handleFilterChange = this.handleFilterChange.bind(this);
@@ -26,7 +27,9 @@ class Kit extends React.Component {
 
     handleFilterChange(e) {
         const filter = e.target.value;
-        this.sortAlpha(filter);
+        this.setState({
+            selectedFilter: filter
+        }, () => { this.sortAlpha(this.state.selectedFilter)});
     }
 
     sortAlpha(attr) {
@@ -43,7 +46,7 @@ class Kit extends React.Component {
             <React.Fragment>
                 <PageHeading 
                     text={"My Kit"} 
-                    selectedFilter={this.props.selectedFilter} 
+                    selectedFilter={this.state.selectedFilter} 
                     handleFilterChange={this.handleFilterChange}
                 />
                 <ProductList 

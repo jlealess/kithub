@@ -19,14 +19,17 @@ class Wishlist extends React.Component {
         const products = nextProps.products;
         if(products !== this.state.products) {
             this.setState({
-                products
+                products,
+                selectedFilter: ''
             })
         };
     }
 
     handleFilterChange(e) {
         const filter = e.target.value;
-        this.sortAlpha(filter);
+        this.setState({
+            selectedFilter: filter
+        }, () => { this.sortAlpha(this.state.selectedFilter) });
     }
 
     sortAlpha(attr) {
@@ -43,7 +46,7 @@ class Wishlist extends React.Component {
             <React.Fragment>
                 <PageHeading 
                     text={"My Wishlist"} 
-                    selectedFilter={this.props.selectedFilter} 
+                    selectedFilter={this.state.selectedFilter} 
                     handleFilterChange={this.handleFilterChange}
                 />
                 <ProductList 

@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Home = (props) => {
+const FindProducts = (props) => {
     return (
 		<div className="home">
         <div className="wrapper">
@@ -42,4 +42,4 @@ const Home = (props) => {
     )
 }
 
-export default Home;
+export default FindProducts;

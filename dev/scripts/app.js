@@ -119,14 +119,13 @@ class App extends React.Component {
       currentUserId: "",
       currentUser: "",
       loggedIn: false,
-      displayAddToWishlist: true,
-      displayAddToKit: true,
-      displayRemove: true,
+      // displayAddToWishlist: true,
+      // displayAddToKit: true,
+      // displayRemove: true,
       currentUserWishlist: [],
       currentUserKit: [],
       featuredProducts: [],
       homepageHeadline: "Featured Products",
-      secondaryNavVisible: false,
       selectedFilter: ""
     };
 
@@ -136,123 +135,87 @@ class App extends React.Component {
     this.loginWithGoogle = this.loginWithGoogle.bind(this);
     this.removeProduct = this.removeProduct.bind(this);
     this.addToList = this.addToList.bind(this);
-    this.showSecondaryNav = this.showSecondaryNav.bind(this);
   }
 
   componentDidMount() {
-    this.dbRef = firebase.database().ref("users");
-    this.featuredProductsDbRef = firebase.database().ref("featured-products");
-    const featuredProductsArray = [];
-    const numProducts = 930;
-    for (let i = 0; i < 12; i++) {
-       let random = randoNum(numProducts);
-       featuredProductsArray.push(random);
-    }
-    const shuffledProducts = shuffle(featuredProductsArray);
-    const products = shuffledProducts.map(product => { 
-      this.getProductById(product);
-    });
-    this.setState({
-      homepageHeadline: "Featured Products",
-    });
-
-    firebase.auth().onAuthStateChanged(user => {
-      if (user !== null) {
-        let dbRefUser = firebase.database().ref("users/" + user.uid);
-
-        // checks to see if current user exists; if not, creates user
-        dbRefUser.on("value", snapshot => {
-          if (snapshot.exists()) {
-            let loggedInUser = snapshot.val();
-            let loggedInUserKit = loggedInUser.kit || {};
-            let loggedInUserWishlist = loggedInUser.wishList || {};
-            let loggedInUserWishlistArray = Object.values(loggedInUserWishlist);
-            let loggedInUserKitArray = Object.values(loggedInUserKit);
-
-            this.setState({
-              loggedIn: true,
-              currentUser: loggedInUser,
-              currentUserId: loggedInUser.userId,
-              currentUserWishlist: loggedInUserWishlistArray,
-              currentUserKit: loggedInUserKitArray
-            });
-            this.dbRefUser = dbRefUser;
-          } else {
-            let loggedInUser = {
-              userId: user.uid,
-              userName: user.displayName
-            };
-            this.setState({
-              loggedIn: true,
-              currentUser: loggedInUser,
-              currentUserId: loggedInUser.userId
-            });
-            dbRefUser.set(loggedInUser);
-          }
-        });
-      } else {
-        this.setState({
-          loggedIn: false,
-          currentUser: null,
-          currentUserKit: [],
-          currentUserWishlist: []
-        });
-      }
-    });
-  }
-  loginWithGoogle() {
-    const provider = new firebase.auth.GoogleAuthProvider();
-    firebase
-      .auth()
-      .signInWithPopup(provider)
-      .then(user => {
-        console.log(user);
-      })
-      .catch(err => {
-        console.log(err);
-      });
-  }
-  logout() {
-    firebase.auth().signOut();
-    this.dbRef.off("value");
+    this.setFeaturedProducts();
+    this.setUser();
   }
 
-  handleChange(e) {
-    this.setState(
-      {
-        [e.target.name]: e.target.value,
-        isProductTypeSelected: true
-      },
-      () => {
-        this.getResultsByProductType();
-      }
-    );
-  }
-
-  removeProduct(productId, productList, ...Args) {
-    firebase
+  addToList(productId, productList, product) {
+    let dbRef = firebase
       .database()
-      .ref(`users/${this.state.currentUserId}/${productList}/${productId}`)
-      .remove();
+      .ref(`users/${this.state.currentUserId}/${productList}/${productId}`);
+
+    const newListItem = {
+      id: productId,
+      name: product.name,
+      image_link: product.image_link,
+      brand: product.brand,
+      product_link: product.product_link,
+      product_type: product.product_type
+    };
+    dbRef.set(newListItem);
   }
 
-  getProductById(productId) {
-    axios({
-      url: `https://makeup-api.herokuapp.com/api/v1/products/${productId}.json`,
-      method: "GET",
-      responseType: "json"
-    }).then(res => {
-      const product = res.data;
-      const featuredProducts = this.state.featuredProducts;
-      const matches = [];
-      for (let i = 0; i < featuredProducts.length; i++) {
-        if (featuredProducts[i].id === productId) {
-          matches.push(productId);
+  getCategory() {
+    let products = this.state.productTypes;
+    for (let i = 0; i < products.length; i++) {
+      if (products[i].value === this.state.selectedProductType) {
+        this.setState({
+          selectedProductCategories: products[i].categories
+        });
+      }
+    }
+  }
+
+  getProducts() {
+    const queryResults = Array.from(this.state.queryResults);
+    let productsWithCurrentCategory = [];
+    let headline = `Results for ${
+      this.state.selectedProductType
+      } – ${this.state.categoryToDisplay.toLowerCase()}`;
+
+    if (this.state.categoryToDisplay === "All") {
+      productsWithCurrentCategory.push(...queryResults);
+    } else {
+      for (let i = 0; i < queryResults.length; i++) {
+        if (
+          queryResults[i].category ===
+          this.state.categoryToDisplay.replace(/\s/g, "_").toLowerCase()
+        ) {
+          productsWithCurrentCategory.push(queryResults[i]);
         }
       }
-      if (matches.length === 0) {
-        featuredProducts.push(product);
-      }
+    }
+    this.setState({
+      productsToDisplay: productsWithCurrentCategory,
+      homepageHeadline: headline
+    });
+  }
+
+  getProductsByIds(array) {
+    const featuredProducts = [];
+
+    array.map(arrItem => {
+      const productId = arrItem;
+
+      axios({
+        url: `https://makeup-api.herokuapp.com/api/v1/products/${productId}.json`,
+        method: "GET",
+        responseType: "json"
+      }).then(res => {
+        const product = res.data;
+        const matches = [];
+        for (let i = 0; i < featuredProducts.length; i++) {
+          if (featuredProducts[i].id === productId) {
+            matches.push(productId);
+          }
+        }
+        if (matches.length === 0) {
+          featuredProducts.push(product);
+        }
+      })
 
       this.setState({
         featuredProducts,
@@ -281,54 +244,16 @@ class App extends React.Component {
     });
   }
 
-  setCategory(e) {
-    this.setState({
-      [e.target.name]: e.target.value,
-      categoryToDisplay: e.target.value
-    });
-  }
-
-  getCategory() {
-    let products = this.state.productTypes;
-    for (let i = 0; i < products.length; i++) {
-      if (products[i].value === this.state.selectedProductType) {
-        this.setState({
-          selectedProductCategories: products[i].categories
-        });
+  handleChange(e) {
+    this.setState(
+      {
+        [e.target.name]: e.target.value,
+        isProductTypeSelected: true
+      },
+      () => {
+        this.getResultsByProductType();
       }
-    }
-  }
-
-  getProducts() {
-    const queryResults = Array.from(this.state.queryResults);
-    let productsWithCurrentCategory = [];
-    let headline = `Results for ${
-      this.state.selectedProductType
-    } – ${this.state.categoryToDisplay.toLowerCase()}`;
-
-    if (this.state.categoryToDisplay === "All") {
-      productsWithCurrentCategory.push(...queryResults);
-    } else {
-      for (let i = 0; i < queryResults.length; i++) {
-        if (
-          queryResults[i].category ===
-          this.state.categoryToDisplay.replace(/\s/g, "_").toLowerCase()
-        ) {
-          productsWithCurrentCategory.push(queryResults[i]);
-        }
-      }
-    }
-    this.setState({
-      productsToDisplay: productsWithCurrentCategory,
-      homepageHeadline: headline
-    });
-  }
-
-  showSecondaryNav() {
-    console.log('clicked');
-    this.setState({
-      secondaryNavVisible: !this.state.secondaryNavVisible
-    }, () => {console.log(this.state.secondaryNavVisible)})
+    );
   }
 
   handleSubmit(e) {
@@ -336,71 +261,159 @@ class App extends React.Component {
     this.getProducts();
   }
 
-  addToList(
-    productId,
-    productList,
-    product
-  ) {
-    let dbRefUser = firebase
-      .database()
-      .ref(`users/${this.state.currentUserId}`);
-    let dbRefList = firebase
-      .database()
-      .ref(`users/${this.state.currentUserId}/${productList}/${productId}`);
+  loginWithGoogle() {
+    const provider = new firebase.auth.GoogleAuthProvider();
+    firebase
+      .auth()
+      .signInWithPopup(provider)
+      .then(user => {
+        console.log(user);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  }
 
-    const newListItem = {
-      id: productId,
-      name: product.name,
-      image_link: product.image_link,
-      brand: product.brand,
-      product_link: product.product_link,
-      product_type: product.product_type
-    };
-    dbRefList.set(newListItem);
+  logout() {
+    firebase.auth().signOut();
+    this.dbRef.off("value");
+  }
+
+  removeProduct(productId, productList, ...Args) {
+    firebase
+      .database()
+      .ref(`users/${this.state.currentUserId}/${productList}/${productId}`)
+      .remove();
+  }
+
+  setCategory(e) {
+    this.setState({
+      [e.target.name]: e.target.value,
+      categoryToDisplay: e.target.value
+    });
+  }
+
+  setFeaturedProducts() {
+    const featuredProductsArray = [];
+    const numProducts = 930;
+    for (let i = 0; i < 12; i++) {
+      let random = randoNum(numProducts);
+      featuredProductsArray.push(random);
+    }
+    const shuffledProducts = shuffle(featuredProductsArray);
+    const products = this.getProductsByIds(shuffledProducts);
+    this.setState({ homepageHeadline: "Featured Products" });
+  }
+
+  setUser() {
+    this.dbRef = firebase.database().ref("users");
+    firebase.auth().onAuthStateChanged(user => {
+      if (user !== null) {
+        let dbRefUser = firebase.database().ref("users/" + user.uid);
+
+        // checks to see if current user exists; if not, creates user
+        dbRefUser.on("value", snapshot => {
+          if (snapshot.exists()) {
+            let loggedInUser = snapshot.val();
+            let loggedInUserKit = loggedInUser.kit || {};
+            let loggedInUserWishlist = loggedInUser.wishList || {};
+            let loggedInUserWishlistArray = Object.values(loggedInUserWishlist);
+            let loggedInUserKitArray = Object.values(loggedInUserKit);
+
+            this.setState({
+              loggedIn: true,
+              currentUser: loggedInUser,
+              currentUserId: loggedInUser.userId,
+              currentUserWishlist: loggedInUserWishlistArray,
+              currentUserKit: loggedInUserKitArray
+            });
+            this.dbRefUser = dbRefUser;
+          } else {
+            let loggedInUser = { userId: user.uid, userName: user.displayName };
+            this.setState({
+              loggedIn: true,
+              currentUser: loggedInUser,
+              currentUserId: loggedInUser.userId
+            });
+            dbRefUser.set(loggedInUser);
+          }
+        });
+      } else {
+        this.setState({
+          loggedIn: false,
+          currentUser: null,
+          currentUserKit: [],
+          currentUserWishlist: []
+        });
+      }
+    });
   }
 
   render() {
-    return <Router>
+    return (
+      <Router>
         <div className="app">
-          <Header 
-            loggedIn={this.state.loggedIn} 
-            loginWithGoogle={this.loginWithGoogle} 
-            logout={this.logout} 
+          <Header
+            loggedIn={this.state.loggedIn}
+            loginWithGoogle={this.loginWithGoogle}
+            logout={this.logout}
           />
           <main className="app--inner">
-            <Route path="/" exact render={() => <HomePage 
-              button1Handler={this.addToList}
-              button2Handler={this.addToList}
-              currentUserId={this.state.currentUserId}
-              handleChange={this.handleChange}
-              handleSubmit={this.handleSubmit}
-              isProductTypeSelected={this.state.isProductTypeSelected}
-              loggedIn={this.state.loggedIn} 
-              loginWithGoogle={this.loginWithGoogle} 
-              products={this.state.productsToDisplay}
-              productTypes={this.state.productTypes}
-              selectedFilter={this.state.selectedFilter}
-              selectedProductType={this.state.selectedProductType}
-              selectedProductCategories={this.state.selectedProductCategories}
-              setCategory={this.setCategory}
-              text={this.state.homepageHeadline}
-            />} />
+            <Route
+              path="/"
+              exact
+              render={() => (
+                <HomePage
+                  button1Handler={this.addToList}
+                  button2Handler={this.addToList}
+                  currentUserId={this.state.currentUserId}
+                  handleChange={this.handleChange}
+                  handleSubmit={this.handleSubmit}
+                  isProductTypeSelected={this.state.isProductTypeSelected}
+                  loggedIn={this.state.loggedIn}
+                  loginWithGoogle={this.loginWithGoogle}
+                  products={this.state.productsToDisplay}
+                  productTypes={this.state.productTypes}
+                  selectedProductType={this.state.selectedProductType}
+                  selectedProductCategories={
+                    this.state.selectedProductCategories
+                  }
+                  setCategory={this.setCategory}
+                  text={this.state.homepageHeadline}
+                />
+              )}
+            />
 
-          <Route path="/my-wishlist" exact render={() => <Wishlist 
-            products={this.state.currentUserWishlist} 
-            button1Handler={this.removeProduct} 
-            button2Handler={this.addToList} 
-            loggedIn={this.state.loggedIn} />} />    
+            <Route
+              path="/my-wishlist"
+              exact
+              render={() => (
+                <Wishlist
+                  products={this.state.currentUserWishlist}
+                  button1Handler={this.removeProduct}
+                  button2Handler={this.addToList}
+                  loggedIn={this.state.loggedIn}
+                />
+              )}
+            />
 
-          <Route path="/my-kit" exact render={() => <Kit 
-            products={this.state.currentUserKit} 
-            button1Handler={this.addToList} 
-            button2Handler={this.removeProduct} 
-            loggedIn={this.state.loggedIn} />} />
+            <Route
+              path="/my-kit"
+              exact
+              render={() => (
+                <Kit
+                  products={this.state.currentUserKit}
+                  button1Handler={this.addToList}
+                  button2Handler={this.removeProduct}
+                  loggedIn={this.state.loggedIn}
+                />
+              )}
+            />
           </main>
           <Footer />
         </div>
-      </Router>;
+      </Router>
+    );
   }
 }
 

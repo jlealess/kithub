@@ -40,11 +40,10 @@ export function shuffle(array) {
     return array;
 }
 
-export function multipleRando(arr, num) {
-    const numItems = (num > arr.length) ? arr.length : num;
+export function multipleRandoNums(max, numToReturn) {
     const randomItems = [];
-    for (let i = 0; i < numItems; i++) {
-        randomItems.push(rando(arr));
+    for (let i = 0; i < numToReturn; i++) {
+        randomItems.push(randoNum(max));
     }
     return randomItems;
 }

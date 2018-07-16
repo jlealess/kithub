@@ -18,7 +18,7 @@ const Header = (props) => {
           <ul className="clearfix main-nav__list">
             <li>
               <NavLink exact to="/" activeClassName="active" className="main-nav__list__link">
-                Search
+                Home
               </NavLink>
             </li>
             {props.loggedIn === true ? <li>
