@@ -366,11 +366,8 @@ class App extends React.Component {
             loggedIn={this.state.loggedIn} 
             loginWithGoogle={this.loginWithGoogle} 
             logout={this.logout} 
-            productTypes={this.state.productTypes} 
-            showSecondaryNav={this.showSecondaryNav}
-            secondaryNavVisible={this.state.secondaryNavVisible}
           />
-          <div className="app--inner">
+          <main className="app--inner">
             <Route path="/" exact render={() => <HomePage 
               button1Handler={this.addToList}
               button2Handler={this.addToList}
@@ -400,7 +397,7 @@ class App extends React.Component {
             button1Handler={this.addToList} 
             button2Handler={this.removeProduct} 
             loggedIn={this.state.loggedIn} />} />
-          </div>
+          </main>
           <Footer />
         </div>
       </Router>;
