@@ -21,11 +21,9 @@ class Product extends React.Component {
         const buttonText = `${button}Text`;
         let buttonTextValue = this.state[buttonText];
 
-        if (buttonTextValue === 'Add to kit') {
-            buttonTextValue = 'Added to kit'
-        } else if (buttonTextValue === 'Add to wishlist') {
-            buttonTextValue = 'Added to wishlist'
-        }
+        if (/Add to/.test(buttonTextValue)) {
+          buttonTextValue = buttonTextValue.replace(/Add to/, "Added to");
+        } 
 
         this.setState({
             [buttonStateToChange]: 'disabled',
