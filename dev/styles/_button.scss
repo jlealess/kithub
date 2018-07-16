@@ -18,6 +18,13 @@
         color: white;
     }
 
+    &--disabled {
+        background-color: white;
+        border: 1px solid $light-blue;
+        box-shadow: 5px 5px 0 $light-blue;
+        color: $light-blue;
+    }
+
     &--inactive {
         border: 1px solid $light-blue;
         color: $light-blue;
@@ -29,9 +36,9 @@
         color: white;
 
         &:hover {
-            background-color: white;
+            background-color: $light-purple;
             box-shadow: 5px 5px 0 $dark-purple;
-            color: $med-purple;
+            color: black;
         }
     }
 

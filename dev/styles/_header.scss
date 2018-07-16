@@ -39,6 +39,7 @@ header {
     }
 }
 
+
 .main-nav {
     @media screen and (max-width: 600px) {
         width: 100%;
@@ -49,6 +50,8 @@ header {
 
         &:hover {
             border-bottom: 2px solid $med-purple;
+            color: white;
+            cursor: default;
         }
     }
 
@@ -84,7 +87,8 @@ header {
             }
 
             &:hover {
-                border-bottom: 2px solid white;
+                border-bottom: 2px solid $light-purple;
+                color: $light-purple;
             }
         }
     }

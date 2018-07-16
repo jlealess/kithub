@@ -17,7 +17,6 @@ const ProductList = (props) => {
 										name={product.name}
                                         product_link={product.product_link}
                                         product_type={product.product_type}
-                                        currentUserId={props.currentUserId}
                                         button1Text={props.button1Text}
                                         button1Handler={props.button1Handler}
                                         button1Context={props.button1Context}
@@ -33,10 +32,6 @@ const ProductList = (props) => {
                     </ul>
                 : <p className="products__no-results">No products to display yet</p>
             }
-
-                
-        
-              
     </div>
     )
 }

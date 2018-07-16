@@ -1,5 +1,24 @@
-export function rando(arr) {
-    return arr[Math.floor(Math.random() * arr.length)];
+export function sortArray(array, attr) {
+
+    function compare(a, b) {
+        const categoryA = (a[attr] !== null && a[attr] !== undefined) ? a[attr].toUpperCase() : '';
+        const categoryB = (b[attr] !== null && b[attr] !== undefined) ? b[attr].toUpperCase() : '';
+
+        let comparison = 0;
+        if (categoryA > categoryB) {
+            comparison = 1;
+        } else if (categoryA < categoryB) {
+            comparison = -1;
+        }
+        return comparison;
+    }
+
+    let sortedProducts = array.sort(compare);
+    return sortedProducts;
+}
+
+export function randoNum(max) {
+    return Math.floor(Math.random() * Math.floor(max));
 }
 
 export function shuffle(array) {
