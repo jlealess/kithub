@@ -190,7 +190,10 @@ class App extends React.Component {
     }
     this.setState({
       productsToDisplay: productsWithCurrentCategory,
-      homepageHeadline: headline
+      homepageHeadline: headline,
+      selectedProductType: '',
+      selectedProductCategories: [],
+      isProductTypeSelected: false
     });
   }
 

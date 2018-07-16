@@ -28,7 +28,14 @@ class HomePage extends React.Component {
 
     handleFilterChange(e) {
         const filter = e.target.value;
-        this.sortAlpha(filter);
+        this.setState(
+          {
+            selectedFilter: filter
+          },
+          () => {
+            this.sortAlpha(this.state.selectedFilter);
+          }
+        );
     }
 
     sortAlpha(attr) {
@@ -54,7 +61,7 @@ class HomePage extends React.Component {
                     products={this.props.products}
                 />
                 <HomePageHeading
-                    selectedFilter={this.props.selectedFilter}
+                    selectedFilter={this.state.selectedFilter}
                     handleFilterChange={this.handleFilterChange}
                     text={this.props.text}
                 />
