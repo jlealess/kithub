@@ -57,7 +57,7 @@ class Product extends React.Component {
                 </h3>
     
                 <div className="product__image__container">
-                    <img src={this.props.image_link.startsWith('http://imancosmetics') ? 'images/no-photo-available.png' : this.props.image_link} alt={this.props.name} className="product__image" />
+                    <img src={this.props.image_link} alt={this.props.name} onError={(e) => { e.target.src = 'images/no-photo-available.png' }} className="product__image" />
                 </div>	
                 <div className="buttons product__buttons">
                   {this.props.loggedIn === false && <button className="button" onClick={this.props.loginWithGoogle}>
