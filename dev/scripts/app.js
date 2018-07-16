@@ -6,23 +6,13 @@ import {
 	BrowserRouter as Router,
 	Route, Link, NavLink
 } from 'react-router-dom';
-import ProductList from './ProductList';
 import Header from './Header';
 import Footer from './Footer';
 import HomePage from './HomePage';
 import { shuffle, randoNum } from './helpers';
 import Wishlist from './Wishlist';
 import Kit from './Kit';
-
-
-const config = {
-  apiKey: "AIzaSyCqf-B49wkmM2dxSkJoOR1uwF0lfypU-vw",
-  authDomain: "kithub-aa9f5.firebaseapp.com",
-  databaseURL: "https://kithub-aa9f5.firebaseio.com",
-  projectId: "kithub-aa9f5",
-  storageBucket: "",
-  messagingSenderId: "321165294365"
-};
+import { config } from './keys';
 
 firebase.initializeApp(config);
 
@@ -143,10 +133,12 @@ class App extends React.Component {
   }
 
   addToList(productId, productList, product) {
+    // get db ref
     let dbRef = firebase
       .database()
       .ref(`users/${this.state.currentUserId}/${productList}/${productId}`);
 
+    // create new object from incoming product, then set item in db
     const newListItem = {
       id: productId,
       name: product.name,
@@ -159,6 +151,7 @@ class App extends React.Component {
   }
 
   getCategory() {
+    // when user selects a category from form in FindProducts, check to make sure it matches existing category value then set it to state
     let products = this.state.productTypes;
     for (let i = 0; i < products.length; i++) {
       if (products[i].value === this.state.selectedProductType) {
@@ -170,12 +163,15 @@ class App extends React.Component {
   }
 
   getProducts() {
+    // clone array from queryResults state
     const queryResults = Array.from(this.state.queryResults);
+    // initialize array to hold products matching selected category from FindProducts form
     let productsWithCurrentCategory = [];
+    // set headline to reflect display context
     let headline = `Results for ${
       this.state.selectedProductType
       } – ${this.state.categoryToDisplay.toLowerCase()}`;
-
+      // if user has selected all, push all query results into productsWithCurrentCategory array; otherwise only push items that match categoryToDisplay
     if (this.state.categoryToDisplay === "All") {
       productsWithCurrentCategory.push(...queryResults);
     } else {
@@ -198,8 +194,10 @@ class App extends React.Component {
   }
 
   getProductsByIds(array) {
+    // initialize array to store each result of axios call
     const featuredProducts = [];
 
+    // map through the array passed as an argument to fetch each item from the db, then push it to the featuredProducts array
     array.map(arrItem => {
       const productId = arrItem;
 
@@ -236,6 +234,7 @@ class App extends React.Component {
   }
 
   getResultsByProductType() {
+    // when user selects a product type, make axios call to fetch matching results
     axios({
       url: `https://makeup-api.herokuapp.com/api/v1/products.json`,
       method: "GET",
@@ -305,13 +304,18 @@ class App extends React.Component {
   }
 
   setFeaturedProducts() {
+    // creates array of random IDs for items in MakeupAPI 
     const featuredProductsArray = [];
+    // current # of products in db
     const numProducts = 930;
+    // create 12 random numbers to use as IDs for featured products
     for (let i = 0; i < 12; i++) {
       let random = randoNum(numProducts);
       featuredProductsArray.push(random);
     }
+    // shuffle order, just for extra randomness
     const shuffledProducts = shuffle(featuredProductsArray);
+    // pass shuffledProducts to getProductsByIds to retrieve data
     const products = this.getProductsByIds(shuffledProducts);
     this.setState({ homepageHeadline: "Featured Products" });
   }
