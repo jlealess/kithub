@@ -109,12 +109,8 @@ class App extends React.Component {
       currentUserId: "",
       currentUser: "",
       loggedIn: false,
-      // displayAddToWishlist: true,
-      // displayAddToKit: true,
-      // displayRemove: true,
       currentUserWishlist: [],
       currentUserKit: [],
-      featuredProducts: [],
       homepageHeadline: "Featured Products",
       selectedFilter: ""
     };
@@ -193,46 +189,6 @@ class App extends React.Component {
     });
   }
 
-  getProductsByIds(array) {
-    // initialize array to store each result of axios call
-    const featuredProducts = [];
-
-    // map through the array passed as an argument to fetch each item from the db, then push it to the featuredProducts array
-    array.map(arrItem => {
-      const productId = arrItem;
-
-      axios({
-        url: `https://makeup-api.herokuapp.com/api/v1/products/${productId}.json`,
-        method: "GET",
-        responseType: "json"
-      }).then(res => {
-        const product = res.data;
-        featuredProducts.push(product);
-        }).catch(function (error) {
-          if (error.response) {
-            // The request was made and the server responded with a status code
-            // that falls out of the range of 2xx
-            console.log(error.response.data);
-            console.log(error.response.status);
-            console.log(error.response.headers);
-          } else if (error.request) {
-            // The request was made but no response was received
-            // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-            // http.ClientRequest in node.js
-            console.log(error.request);
-          } else {
-            // Something happened in setting up the request that triggered an Error
-            console.log('Error', error.message);
-          }
-          console.log(error.config);
-        });
-    });
-    this.setState({
-      featuredProducts,
-      productsToDisplay: featuredProducts
-    });
-  }
-
   getResultsByProductType() {
     // when user selects a product type, make axios call to fetch matching results
     axios({
@@ -304,20 +260,54 @@ class App extends React.Component {
   }
 
   setFeaturedProducts() {
-    // creates array of random IDs for items in MakeupAPI 
-    const featuredProductsArray = [];
+    // initialize array of random product IDs to retrieve from API
+    const productsToRetrieve = [];
+
+    // initialize array that will contain products retrieved from API
+    const featuredProducts = [];
+
     // current # of products in db
     const numProducts = 930;
     // create 12 random numbers to use as IDs for featured products
     for (let i = 0; i < 12; i++) {
       let random = randoNum(numProducts);
-      featuredProductsArray.push(random);
+      productsToRetrieve.push(random);
     }
     // shuffle order, just for extra randomness
-    const shuffledProducts = shuffle(featuredProductsArray);
-    // pass shuffledProducts to getProductsByIds to retrieve data
-    const products = this.getProductsByIds(shuffledProducts);
-    this.setState({ homepageHeadline: "Featured Products" });
+    const products = shuffle(productsToRetrieve);
+
+    // map through the array passed as an argument to fetch each item from the db, then push it to the featuredProducts array
+    products.map(productId => {
+      axios({
+        url: `https://makeup-api.herokuapp.com/api/v1/products/${productId}.json`,
+        method: "GET",
+        responseType: "json"
+      }).then(res => {
+        const product = res.data;
+        featuredProducts.push(product);
+      }).catch(function (error) {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
+      });
+    });
+    this.setState({
+      productsToDisplay: featuredProducts
+    });
+
   }
 
   setUser() {
